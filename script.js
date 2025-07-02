@@ -6,10 +6,17 @@ const timerDisplay = document.getElementById('timer');
 const gameOverOverlay = document.getElementById('game-over-overlay');
 const finalScoreText = document.getElementById('final-score-text');
 const restartBtn = document.getElementById('restart-btn');
+const clickSound = document.getElementById('click-sound');
 
 let score = 0;
 let timeLeft = 30;
 let timerInterval;
+
+// Play click sound
+function playClickSound() {
+  clickSound.currentTime = 0;
+  clickSound.play();
+}
 
 function moveCircle() {
   const maxX = gameArea.clientWidth - circle.offsetWidth;
@@ -21,6 +28,8 @@ function moveCircle() {
 }
 
 function startGame() {
+  playClickSound();
+
   score = 0;
   timeLeft = 30;
   scoreboard.textContent = 'Score: ' + score;
@@ -41,12 +50,6 @@ function startGame() {
   }, 1000);
 }
 
-circle.addEventListener('click', () => {
-  score++;
-  scoreboard.textContent = 'Score: ' + score;
-  moveCircle();
-});
-
 function endGame() {
   clearInterval(timerInterval);
   circle.style.display = 'none';
@@ -56,8 +59,15 @@ function endGame() {
   gameOverOverlay.style.display = 'flex';
 }
 
-restartBtn.addEventListener('click', () => {
-  startGame();
+circle.addEventListener('click', () => {
+  playClickSound();
+  score++;
+  scoreboard.textContent = 'Score: ' + score;
+  moveCircle();
 });
 
 startBtn.addEventListener('click', startGame);
+restartBtn.addEventListener('click', () => {
+  playClickSound();
+  startGame();
+});
